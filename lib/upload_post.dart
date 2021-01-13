@@ -6,7 +6,7 @@ import 'package:universal_html/prefer_universal/html.dart' as html;
 import 'package:firebase/firebase.dart' as fb;
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker_web/image_picker_web.dart';
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as Path;
 import 'package:mime_type/mime_type.dart';
 
 class UploadPost extends StatefulWidget {
@@ -165,24 +165,41 @@ class _UploadPostState extends State<UploadPost> {
                     flex: 1,
                     child: IconButton(icon: Icon(Icons.upload_file),
                         onPressed: () async {
-                          FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.any);
-                          if(result != null) {
-                            html.File file = html.File(result.files.first.bytes, 'kto');
-                            uploadImageFile(file, 'kto');
-                          }
+                          var img = await imagePicker();
+                          var url = await uploadFile(img, 'images/konkurs_images', 'kto');
+                          imageUrlCtrl.text = url.toString();
+                          print(url);
                         },
                     ),
                   )
                 ],
               ),
               SizedBox(height: 20,),
-              TextFormField(
-                decoration: inputDecoration('Prize Image Url', 'Prize Image', prizeUrlCtrl),
-                controller: prizeUrlCtrl,
-                validator: (value) {
-                  if (value.isEmpty) return 'Value is empty';
-                  return null;
-                },
+              Row(
+                children: [
+                  Expanded(
+                    flex: 8,
+                    child: TextFormField(
+                      decoration: inputDecoration('Prize Image Url', 'Prize Image', prizeUrlCtrl),
+                      controller: prizeUrlCtrl,
+                      validator: (value) {
+                        if (value.isEmpty) return 'Value is empty';
+                        return null;
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: IconButton(icon: Icon(Icons.upload_file),
+                      onPressed: () async {
+                        var img = await imagePicker();
+                        var url = await uploadFile(img, 'images/konkurs_images', img.fileName);
+                        prizeUrlCtrl.text = url.toString();
+                        print(url);
+                      },
+                    ),
+                  )
+                ],
               ),
               SizedBox(height: 20,),
               TextFormField(

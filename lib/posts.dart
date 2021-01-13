@@ -85,7 +85,6 @@ class _PostsState extends State<Posts> {
               color: Colors.indigoAccent,
               borderRadius: BorderRadius.circular(15)),
         ),
-
         Expanded(
           child: RefreshIndicator(
             child: ListView.builder(
@@ -216,7 +215,10 @@ class _PostsState extends State<Posts> {
                 ],
               ),
             ),
-          )
+          ),
+          Flexible(
+            child: Image.network(d.prize),
+          ),
         ],
       ),
     );
