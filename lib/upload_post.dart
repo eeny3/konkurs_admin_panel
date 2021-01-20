@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:universal_html/prefer_universal/html.dart' as html;
 import 'package:firebase/firebase.dart' as fb;
 import 'package:file_picker/file_picker.dart';
@@ -73,6 +74,7 @@ class _UploadPostState extends State<UploadPost> {
       'todo': 'kekW',
       'date': timestamp,
       'postId' : docID,
+      'winner' : "",
     };
     await ref.set(_postData);
   }
@@ -166,7 +168,7 @@ class _UploadPostState extends State<UploadPost> {
                     child: IconButton(icon: Icon(Icons.upload_file),
                         onPressed: () async {
                           var img = await imagePicker();
-                          var url = await uploadFile(img, 'images/konkurs_images', 'kto');
+                          var url = await uploadFile(img, 'images/konkurs_images', img.fileName);
                           imageUrlCtrl.text = url.toString();
                           print(url);
                         },

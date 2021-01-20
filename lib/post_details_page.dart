@@ -3,27 +3,27 @@ import 'package:konkurs_admin/upload_post.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:vertical_tabs/vertical_tabs.dart';
 import 'posts.dart';
-import 'closed_posts.dart';
+import 'post_details.dart';
 
-class AdminPanel extends StatefulWidget {
+class PostDetailsPage extends StatefulWidget {
+  final post;
+  PostDetailsPage(this.post);
   @override
-  _AdminPanelState createState() => _AdminPanelState();
+  _PostDetailsPageState createState() => _PostDetailsPageState();
 }
 
-class _AdminPanelState extends State<AdminPanel> {
+class _PostDetailsPageState extends State<PostDetailsPage> {
 
   int _pageIndex = 0;
 
   final List<String> titles = [
-    'Posts',
-    'Closed Posts',
-    'Upload Post',
+    'Details',
+    'Home',
   ];
 
   final List icons = [
-    LineIcons.rocket,
-    Icons.location_disabled,
-    LineIcons.arrow_circle_up,
+    LineIcons.book,
+    LineIcons.home,
   ];
 
   @override
@@ -49,16 +49,16 @@ class _AdminPanelState extends State<AdminPanel> {
                   initialIndex: _pageIndex,
                   onSelect: (index){
                     _pageIndex = index;
+                     if(_pageIndex == 1)
+                       Navigator.pop(context);
                   },
                   tabs: <Tab>[
                     tab(titles[0], icons[0]),
                     tab(titles[1], icons[1]),
-                    tab(titles[2], icons[2]),
                   ],
                   contents: <Widget>[
-                    CoverWidget(widget: Posts()),
-                    CoverWidget(widget: ClosedPosts()),
-                    CoverWidget(widget: UploadPost()),
+                    CoverWidget(widget: PostDetails(widget.post)),
+                    CoverWidget(widget: Container()),
                   ],
                 ),
               ),
@@ -138,7 +138,7 @@ class CoverWidget extends StatelessWidget {
         margin: EdgeInsets.only(left: 15, right: 15, top: 15),
         padding: EdgeInsets.only(
           left: w * 0.05,
-          right: w * 0.20,
+          right: w * 0.05,
         ),
         decoration: BoxDecoration(
           color: Colors.white,

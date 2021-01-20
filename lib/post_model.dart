@@ -12,7 +12,12 @@ class Post {
   bool shared;
   String todo;
   var date;
+  String prizeImageFileName;
   var postId;
+  String documentName;
+  String winner;
+  int winnerId;
+  bool isFinished;
 
   Post({
     this.name,
@@ -25,12 +30,18 @@ class Post {
     this.shared,
     this.todo,
     this.date,
+    this.prizeImageFileName,
     this.postId,
+    this.documentName,
+    this.winner,
+    this.winnerId,
+    this.isFinished,
   });
 
 
   factory Post.fromFirestore(DocumentSnapshot snapshot){
     var d = snapshot.data();
+    String docName = snapshot.id;
     return Post(
       name: d['name'],
       description: d['description'],
@@ -42,7 +53,12 @@ class Post {
       shared: d['shared'],
       todo: d['todo'],
       date: d['date'],
+      prizeImageFileName: d['prizeImageFileName'],
       postId: d['postId'],
+      documentName: docName,
+      winner: d['winner'],
+      winnerId: d['winnerId'],
+      isFinished: d['isFinished'],
     );
   }
 }

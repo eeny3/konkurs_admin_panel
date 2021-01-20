@@ -5,12 +5,12 @@ import 'utils/cached_image.dart';
 import 'post_details_page.dart';
 import 'participant_profile.dart';
 
-class Posts extends StatefulWidget {
+class ClosedPosts extends StatefulWidget {
   @override
-  _PostsState createState() => _PostsState();
+  _ClosedPostsState createState() => _ClosedPostsState();
 }
 
-class _PostsState extends State<Posts> {
+class _ClosedPostsState extends State<ClosedPosts> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   ScrollController controller;
   DocumentSnapshot _lastVisible;
@@ -24,17 +24,33 @@ class _PostsState extends State<Posts> {
     QuerySnapshot data;
     if (_lastVisible == null)
       data = await firestore
-          .collection(collectionName).where('isFinished', isEqualTo: false)
+          .collection(collectionName).where('isFinished', isEqualTo: true)
           .orderBy('date', descending: false)
           .limit(10)
           .get();
     else
       data = await firestore
-          .collection(collectionName).where('isFinished', isEqualTo: false)
+          .collection(collectionName).where('isFinished', isEqualTo: true)
           .orderBy('date', descending: false)
           .startAfter([_lastVisible['date']])
           .limit(10)
           .get();
+
+    print(data.docs.length);
+    // List docs = data.docs.map((e) => ).toList();
+    // print(data.docs.length);
+    // data.docs.removeLast();
+      // for (int i = 0; i < data.docs.length; ++i) {
+      //   print(data.docs[i].data()["name"]);
+      //   if (data.docs[i].data()["isFinished"] == true) {
+      //     setState(() {
+      //       print(data.docs.removeAt(i));
+      //     });
+      //   }
+      // }
+   // print(data.docs.length);
+
+
 
     if (data != null && data.docs.length > 0) {
       _lastVisible = data.docs[data.docs.length - 1];
@@ -167,7 +183,7 @@ class _PostsState extends State<Posts> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                   ),
                   SizedBox(
@@ -253,44 +269,44 @@ class _PostsState extends State<Posts> {
               ),
               Center(
                   child: Row(
-                children: <Widget>[
-                  FlatButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25)),
-                    color: Colors.redAccent,
-                    child: Text(
-                      'Yes',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    onPressed: () async {
-                      await firestore
-                          .collection(collectionName)
-                          .doc(docName)
-                          .delete();
-                      //print(date);
-                      reloadData();
-                      Navigator.pop(context);
-                    },
-                  ),
-                  SizedBox(width: 10),
-                  FlatButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25)),
-                    color: Colors.deepPurpleAccent,
-                    child: Text(
-                      'No',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              ))
+                    children: <Widget>[
+                      FlatButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25)),
+                        color: Colors.redAccent,
+                        child: Text(
+                          'Yes',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        onPressed: () async {
+                          await firestore
+                              .collection(collectionName)
+                              .doc(docName)
+                              .delete();
+                          //print(date);
+                          reloadData();
+                          Navigator.pop(context);
+                        },
+                      ),
+                      SizedBox(width: 10),
+                      FlatButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25)),
+                        color: Colors.deepPurpleAccent,
+                        child: Text(
+                          'No',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ))
             ],
           );
         });
