@@ -59,6 +59,7 @@ class _PostDetailsState extends State<PostDetails> {
 
   generateWinner() async {
     var winnerIndex = Random().nextInt(participants.length);
+    print(winnerIndex);
     winnerId = winnerIndex;
     DocumentSnapshot winnerParticipant
     = await firestore.collection('users').doc(participants[winnerIndex].toString()).get();

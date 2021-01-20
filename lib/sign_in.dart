@@ -18,8 +18,8 @@ class _SignInState extends State<SignIn> {
   singIn() async {
     try {
       var user = await _auth.signInWithEmailAndPassword(
-          //email: email, password: password);
-          email: 'xabuovx@gmail.com', password: '123456');
+          email: email, password: password);
+          //email: 'xabuovx@gmail.com', password: '123456');
       if (user != null) {
         Navigator.push(context, MaterialPageRoute(
             builder: (context) => AdminPanel()));
