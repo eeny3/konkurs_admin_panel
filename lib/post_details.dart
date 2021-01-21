@@ -18,6 +18,7 @@ class _PostDetailsState extends State<PostDetails> {
   List<dynamic> participants;
   List<Widget> participantWidgets = [];
   String winnerName = "";
+  String winnerUid;
   int winnerId;
   var winnerDoc;
   String person = '';
@@ -63,6 +64,7 @@ class _PostDetailsState extends State<PostDetails> {
     winnerId = winnerIndex;
     DocumentSnapshot winnerParticipant
     = await firestore.collection('users').doc(participants[winnerIndex].toString()).get();
+    winnerUid = participants[winnerIndex].toString();
     setState(() {
       winnerName = '${winnerParticipant['name']}: ${winnerParticipant['email']}';
     });
@@ -170,7 +172,7 @@ class _PostDetailsState extends State<PostDetails> {
                     winnerDoc = await generateWinner();
                     FirebaseFirestore.instance.collection('post')
                         .doc(widget.post.documentName)
-                        .update({'winner': winnerDoc['name'], 'winnerId': winnerId});
+                        .update({'winner': winnerDoc['name'], 'winnerId': winnerId, 'winnerUid': winnerUid});
                     setState(() {
                       widget.post.winner = winnerDoc['name'];
                     });
