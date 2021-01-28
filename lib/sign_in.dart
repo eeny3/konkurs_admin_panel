@@ -25,7 +25,7 @@ class _SignInState extends State<SignIn> {
             builder: (context) => AdminPanel()));
       }
     } catch (e) {
-      print(e);
+      print(e.toString());
     }
   }
 

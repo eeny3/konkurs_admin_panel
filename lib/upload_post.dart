@@ -60,21 +60,35 @@ class _UploadPostState extends State<UploadPost> {
 
   Future saveToDatabase() async {
     var timestamp = FieldValue.serverTimestamp();
+    int a;
+    bool b;
+    var people = [];
     final DocumentReference ref = firestore.collection('post').doc();
     var docID = ref.id;
     _postData = {
-      'name' : titleCtrl.text,
+      'date': timestamp,
       'description' : descriptionCtrl.text,
       'imagepost' : imageUrlCtrl.text,
+      'isFinished' : false,
+      'likesCount' : 0,
+      'name' : titleCtrl.text,
+      'people' : people,
       'prize' : prizeUrlCtrl.text,
+      'shared': b,
       'task1' : taskOneCtrl.text,
+      'task1Type' : taskType1.name,
+      'task1TypeShared' : [],
       'task2' : taskTwoCtrl.text,
+      'task2Type' : taskType2.name,
+      'task2TypeShared' : [],
       'task3' : taskThreeCtrl.text,
-      'shared': true,
+      'task3Type' : taskType3.name,
+      'task3TypeShared' : [],
       'todo': 'kekW',
-      'date': timestamp,
       'postId' : docID,
       'winner' : "",
+      'winnerId' : a,
+      'winnerUid' : "",
     };
     await ref.set(_postData);
   }
@@ -120,6 +134,19 @@ class _UploadPostState extends State<UploadPost> {
       return null;
     }
   }
+
+  List<TaskType> users = <TaskType>[
+    const TaskType('instagram'),
+    const TaskType('tweeter'),
+    const TaskType('system'),
+    const TaskType('comment'),
+    const TaskType('facebook'),
+  ];
+
+  TaskType taskType1;
+  TaskType taskType2;
+  TaskType taskType3;
+
 
   @override
   Widget build(BuildContext context) {
@@ -213,6 +240,29 @@ class _UploadPostState extends State<UploadPost> {
                 },
               ),
               SizedBox(height: 20,),
+              DropdownButtonFormField<TaskType>(
+                decoration: InputDecoration(
+                    hintText: 'select task 1 type',
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.only(right: 0, left: 10),
+                ),
+                value: taskType1,
+                onChanged: (TaskType Value) {
+                  setState(() {
+                    taskType1 = Value;
+                  });
+                },
+                items: users.map((TaskType user) {
+                  return  DropdownMenuItem<TaskType>(
+                    value: user,
+                    child: Text(
+                      user.name,
+                      style:  TextStyle(color: Colors.black),
+                    ),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 20,),
               TextFormField(
                 decoration: inputDecoration('task 2', 'task 2', taskTwoCtrl),
                 controller: taskTwoCtrl,
@@ -222,6 +272,29 @@ class _UploadPostState extends State<UploadPost> {
                 },
               ),
               SizedBox(height: 20,),
+              DropdownButtonFormField<TaskType>(
+                decoration: InputDecoration(
+                  hintText: 'select task 2 type',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.only(right: 0, left: 10),
+                ),
+                value: taskType2,
+                onChanged: (TaskType Value) {
+                  setState(() {
+                    taskType2 = Value;
+                  });
+                },
+                items: users.map((TaskType user) {
+                  return  DropdownMenuItem<TaskType>(
+                    value: user,
+                    child: Text(
+                      user.name,
+                      style:  TextStyle(color: Colors.black),
+                    ),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 20,),
               TextFormField(
                 decoration: inputDecoration('task 3', 'task 3', taskThreeCtrl),
                 controller: taskThreeCtrl,
@@ -229,6 +302,29 @@ class _UploadPostState extends State<UploadPost> {
                   //if (value.isEmpty) return 'Value is empty';
                   return null;
                 },
+              ),
+              SizedBox(height: 20,),
+              DropdownButtonFormField<TaskType>(
+                decoration: InputDecoration(
+                  hintText: 'select task 3 type',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.only(right: 0, left: 10),
+                ),
+                value: taskType3,
+                onChanged: (TaskType Value) {
+                  setState(() {
+                    taskType3 = Value;
+                  });
+                },
+                items: users.map((TaskType user) {
+                  return  DropdownMenuItem<TaskType>(
+                    value: user,
+                    child: Text(
+                      user.name,
+                      style:  TextStyle(color: Colors.black),
+                    ),
+                  );
+                }).toList(),
               ),
               SizedBox(height: 20,),
               TextFormField(
@@ -287,6 +383,11 @@ class _UploadPostState extends State<UploadPost> {
 
     );
   }
+}
+
+class TaskType {
+  const TaskType(this.name);
+  final String name;
 }
 
 InputDecoration inputDecoration(hint, label, controller) {

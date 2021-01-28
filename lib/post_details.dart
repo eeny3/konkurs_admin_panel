@@ -55,6 +55,9 @@ class _PostDetailsState extends State<PostDetails> {
       setState(() {
         participantWidgets.add(participantWidget);
       });
+      setState(() {
+        doneLoadingParticipants = true;
+      });
     }
   }
 
@@ -65,6 +68,17 @@ class _PostDetailsState extends State<PostDetails> {
     DocumentSnapshot winnerParticipant
     = await firestore.collection('users').doc(participants[winnerIndex].toString()).get();
     winnerUid = participants[winnerIndex].toString();
+    var timestamp = FieldValue.serverTimestamp();
+    final DocumentReference ref = firestore.collection('users/$winnerUid/notifications').doc();
+    var docID = ref.id;
+    var _postData = {
+      'message' : "Congratulations! You've won in giveaway. We will contact you later.",
+      'type' : 1,
+      'title' : "You've won!",
+      'is_Unread' : true,
+      'ts' : timestamp,
+    };
+    await ref.set(_postData);
     setState(() {
       winnerName = '${winnerParticipant['name']}: ${winnerParticipant['email']}';
     });
@@ -74,8 +88,19 @@ class _PostDetailsState extends State<PostDetails> {
   @override
   void initState() {
     super.initState();
+    if(widget.post.winner == "")
+      setState(() {
+        doneGeneratingTheWinner = false;
+      });
+    else
+      setState(() {
+        doneGeneratingTheWinner = true;
+      });
     getParticipants();
   }
+
+  bool doneLoadingParticipants = false;
+  bool doneGeneratingTheWinner = false;
 
   @override
   Widget build(BuildContext context) {
@@ -115,19 +140,29 @@ class _PostDetailsState extends State<PostDetails> {
             TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
           ),
           SizedBox(height: 30,),
-          Text(
-            'Participants: ',
-            overflow: TextOverflow.ellipsis,
-            style:
-            TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          Row(
+            children: [
+              Text(
+                'Participants: ',
+                overflow: TextOverflow.ellipsis,
+                style:
+                TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              doneLoadingParticipants ? Container() : SizedBox(height: 20, width: 20,child: CircularProgressIndicator()),
+            ],
           ),
           SizedBox(height: 15,),
           ParticipantsList(participantWidgets),
-          Text(
-            'Winner: ',
-            overflow: TextOverflow.ellipsis,
-            style:
-            TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          Row(
+            children: [
+              Text(
+                'Winner: ',
+                overflow: TextOverflow.ellipsis,
+                style:
+                TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              doneGeneratingTheWinner ? Container() : SizedBox(height: 20, width: 20,child: CircularProgressIndicator()),
+            ],
           ),
           SizedBox(height: 15,),
           InkWell(
@@ -136,7 +171,7 @@ class _PostDetailsState extends State<PostDetails> {
                   builder: (context) => ProfilePage(winnerDoc)));
             },
             child: Text(
-              widget.post.winner,
+              doneGeneratingTheWinner ? widget.post.winner : "",
               style:
               TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
             ),
@@ -154,27 +189,18 @@ class _PostDetailsState extends State<PostDetails> {
                         fontWeight: FontWeight.w600),
                   ),
                   onPressed: () async{
-                    //get winner
-                    // if(widget.post.winner == "") {
-                    //   winnerDoc = await generateWinner();
-                    //     FirebaseFirestore.instance.collection('post')
-                    //         .doc(widget.post.documentName)
-                    //         .update({'winner': winnerDoc['name'], 'winnerId': winnerId});
-                    //     setState(() {
-                    //       widget.post.winner = winnerDoc['name'];
-                    //     });
-                    // }
-                    // else{
-                    //     winnerDoc
-                    //     = await firestore.collection('users').doc(
-                    //         participants[widget.post.winnerId].toString()).get();
-                    // }
+                    setState(() {
+                      doneGeneratingTheWinner = false;
+                    });
                     winnerDoc = await generateWinner();
                     FirebaseFirestore.instance.collection('post')
                         .doc(widget.post.documentName)
                         .update({'winner': winnerDoc['name'], 'winnerId': winnerId, 'winnerUid': winnerUid});
                     setState(() {
                       widget.post.winner = winnerDoc['name'];
+                    },);
+                    setState(() {
+                      doneGeneratingTheWinner = true;
                     });
                   })
           ),
