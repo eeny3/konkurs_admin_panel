@@ -20,6 +20,13 @@ class _PostsState extends State<Posts> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   String collectionName = 'post';
 
+  @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
+  }
+
   Future<Null> _getData() async {
     QuerySnapshot data;
     if (_lastVisible == null)

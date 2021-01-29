@@ -12,6 +12,7 @@ class Post {
   bool shared;
   String todo;
   var date;
+  var people;
   String prizeImageFileName;
   var postId;
   String documentName;
@@ -30,6 +31,7 @@ class Post {
     this.shared,
     this.todo,
     this.date,
+    this.people,
     this.prizeImageFileName,
     this.postId,
     this.documentName,
@@ -53,6 +55,7 @@ class Post {
       shared: d['shared'],
       todo: d['todo'],
       date: d['date'],
+      people: d['people'],
       prizeImageFileName: d['prizeImageFileName'],
       postId: d['postId'],
       documentName: docName,

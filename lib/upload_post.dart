@@ -9,6 +9,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:path/path.dart' as Path;
 import 'package:mime_type/mime_type.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 
 class UploadPost extends StatefulWidget {
   @override
@@ -16,7 +17,6 @@ class UploadPost extends StatefulWidget {
 }
 
 class _UploadPostState extends State<UploadPost> {
-
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   var formKey = GlobalKey<FormState>();
@@ -29,12 +29,12 @@ class _UploadPostState extends State<UploadPost> {
   var descriptionCtrl = TextEditingController();
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
-
   bool notifyUsers = true;
   bool uploadStarted = false;
   String _timestamp;
   String _date;
   var _postData;
+  var endDate;
 
   clearTextFeilds() {
     titleCtrl.clear();
@@ -50,11 +50,11 @@ class _UploadPostState extends State<UploadPost> {
   void handleSubmit() async {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-        setState(()=> uploadStarted = true);
-          await saveToDatabase();
-          setState(()=> uploadStarted = false);
-          openDialog(context, 'Uploaded Successfully', '');
-          clearTextFeilds();
+      setState(() => uploadStarted = true);
+      await saveToDatabase();
+      setState(() => uploadStarted = false);
+      openDialog(context, 'Uploaded Successfully', '');
+      clearTextFeilds();
     }
   }
 
@@ -67,28 +67,29 @@ class _UploadPostState extends State<UploadPost> {
     var docID = ref.id;
     _postData = {
       'date': timestamp,
-      'description' : descriptionCtrl.text,
-      'imagepost' : imageUrlCtrl.text,
-      'isFinished' : false,
-      'likesCount' : 0,
-      'name' : titleCtrl.text,
-      'people' : people,
-      'prize' : prizeUrlCtrl.text,
+      'description': descriptionCtrl.text,
+      'endDate': endDate,
+      'imagepost': imageUrlCtrl.text,
+      'isFinished': false,
+      'likesCount': 0,
+      'name': titleCtrl.text,
+      'people': people,
+      'prize': prizeUrlCtrl.text,
       'shared': b,
-      'task1' : taskOneCtrl.text,
-      'task1Type' : taskType1.name,
-      'task1TypeShared' : [],
-      'task2' : taskTwoCtrl.text,
-      'task2Type' : taskType2.name,
-      'task2TypeShared' : [],
-      'task3' : taskThreeCtrl.text,
-      'task3Type' : taskType3.name,
-      'task3TypeShared' : [],
+      'task1': taskOneCtrl.text,
+      'task1Type': taskType1.name,
+      'task1TypeShared': [],
+      'task2': taskTwoCtrl.text,
+      'task2Type': taskType2.name,
+      'task2TypeShared': [],
+      'task3': taskThreeCtrl.text,
+      'task3Type': taskType3.name,
+      'task3TypeShared': [],
       'todo': 'kekW',
-      'postId' : docID,
-      'winner' : "",
-      'winnerId' : a,
-      'winnerUid' : "",
+      'postId': docID,
+      'winner': "",
+      'winnerId': a,
+      'winnerUid': "",
     };
     await ref.set(_postData);
   }
@@ -121,10 +122,10 @@ class _UploadPostState extends State<UploadPost> {
       );
 
       fb.StorageReference storageReference =
-      fb.storage().ref(ref).child(fileName + ".$extension");
+          fb.storage().ref(ref).child(fileName + ".$extension");
 
       fb.UploadTaskSnapshot uploadTaskSnapshot =
-      await storageReference.put(mediaInfo.data, metadata).future;
+          await storageReference.put(mediaInfo.data, metadata).future;
 
       Uri imageUri = await uploadTaskSnapshot.ref.getDownloadURL();
       print("download url $imageUri");
@@ -147,7 +148,6 @@ class _UploadPostState extends State<UploadPost> {
   TaskType taskType2;
   TaskType taskType3;
 
-
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -164,9 +164,9 @@ class _UploadPostState extends State<UploadPost> {
                 'Post Details',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
               ),
-
-              SizedBox(height: 20,),
-
+              SizedBox(
+                height: 20,
+              ),
               TextFormField(
                 decoration: inputDecoration('Enter Name', 'Name', titleCtrl),
                 controller: titleCtrl,
@@ -174,15 +174,17 @@ class _UploadPostState extends State<UploadPost> {
                   if (value.isEmpty) return 'Value is empty';
                   return null;
                 },
-
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 children: [
                   Expanded(
                     flex: 8,
                     child: TextFormField(
-                      decoration: inputDecoration('Enter Image Url', 'Thumbnail Image', imageUrlCtrl),
+                      decoration: inputDecoration(
+                          'Enter Image Url', 'Thumbnail Image', imageUrlCtrl),
                       controller: imageUrlCtrl,
                       validator: (value) {
                         if (value.isEmpty) return 'Value is empty';
@@ -192,24 +194,29 @@ class _UploadPostState extends State<UploadPost> {
                   ),
                   Expanded(
                     flex: 1,
-                    child: IconButton(icon: Icon(Icons.upload_file),
-                        onPressed: () async {
-                          var img = await imagePicker();
-                          var url = await uploadFile(img, 'images/konkurs_images', img.fileName);
-                          imageUrlCtrl.text = url.toString();
-                          print(url);
-                        },
+                    child: IconButton(
+                      icon: Icon(Icons.upload_file),
+                      onPressed: () async {
+                        var img = await imagePicker();
+                        var url = await uploadFile(
+                            img, 'images/konkurs_images', img.fileName);
+                        imageUrlCtrl.text = url.toString();
+                        print(url);
+                      },
                     ),
                   )
                 ],
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 children: [
                   Expanded(
                     flex: 8,
                     child: TextFormField(
-                      decoration: inputDecoration('Prize Image Url', 'Prize Image', prizeUrlCtrl),
+                      decoration: inputDecoration(
+                          'Prize Image Url', 'Prize Image', prizeUrlCtrl),
                       controller: prizeUrlCtrl,
                       validator: (value) {
                         if (value.isEmpty) return 'Value is empty';
@@ -219,10 +226,12 @@ class _UploadPostState extends State<UploadPost> {
                   ),
                   Expanded(
                     flex: 1,
-                    child: IconButton(icon: Icon(Icons.upload_file),
+                    child: IconButton(
+                      icon: Icon(Icons.upload_file),
                       onPressed: () async {
                         var img = await imagePicker();
-                        var url = await uploadFile(img, 'images/konkurs_images', img.fileName);
+                        var url = await uploadFile(
+                            img, 'images/konkurs_images', img.fileName);
                         prizeUrlCtrl.text = url.toString();
                         print(url);
                       },
@@ -230,7 +239,9 @@ class _UploadPostState extends State<UploadPost> {
                   )
                 ],
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               TextFormField(
                 decoration: inputDecoration('task 1', 'task 1', taskOneCtrl),
                 controller: taskOneCtrl,
@@ -239,12 +250,14 @@ class _UploadPostState extends State<UploadPost> {
                   return null;
                 },
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               DropdownButtonFormField<TaskType>(
                 decoration: InputDecoration(
-                    hintText: 'select task 1 type',
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.only(right: 0, left: 10),
+                  hintText: 'select task 1 type',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.only(right: 0, left: 10),
                 ),
                 value: taskType1,
                 onChanged: (TaskType Value) {
@@ -253,16 +266,18 @@ class _UploadPostState extends State<UploadPost> {
                   });
                 },
                 items: users.map((TaskType user) {
-                  return  DropdownMenuItem<TaskType>(
+                  return DropdownMenuItem<TaskType>(
                     value: user,
                     child: Text(
                       user.name,
-                      style:  TextStyle(color: Colors.black),
+                      style: TextStyle(color: Colors.black),
                     ),
                   );
                 }).toList(),
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               TextFormField(
                 decoration: inputDecoration('task 2', 'task 2', taskTwoCtrl),
                 controller: taskTwoCtrl,
@@ -271,7 +286,9 @@ class _UploadPostState extends State<UploadPost> {
                   return null;
                 },
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               DropdownButtonFormField<TaskType>(
                 decoration: InputDecoration(
                   hintText: 'select task 2 type',
@@ -285,16 +302,18 @@ class _UploadPostState extends State<UploadPost> {
                   });
                 },
                 items: users.map((TaskType user) {
-                  return  DropdownMenuItem<TaskType>(
+                  return DropdownMenuItem<TaskType>(
                     value: user,
                     child: Text(
                       user.name,
-                      style:  TextStyle(color: Colors.black),
+                      style: TextStyle(color: Colors.black),
                     ),
                   );
                 }).toList(),
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               TextFormField(
                 decoration: inputDecoration('task 3', 'task 3', taskThreeCtrl),
                 controller: taskThreeCtrl,
@@ -303,7 +322,9 @@ class _UploadPostState extends State<UploadPost> {
                   return null;
                 },
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               DropdownButtonFormField<TaskType>(
                 decoration: InputDecoration(
                   hintText: 'select task 3 type',
@@ -317,23 +338,25 @@ class _UploadPostState extends State<UploadPost> {
                   });
                 },
                 items: users.map((TaskType user) {
-                  return  DropdownMenuItem<TaskType>(
+                  return DropdownMenuItem<TaskType>(
                     value: user,
                     child: Text(
                       user.name,
-                      style:  TextStyle(color: Colors.black),
+                      style: TextStyle(color: Colors.black),
                     ),
                   );
                 }).toList(),
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               TextFormField(
                 decoration: InputDecoration(
                     hintText: 'Enter Description (Html or Normal Text)',
                     border: OutlineInputBorder(),
                     labelText: 'Description',
-                    contentPadding: EdgeInsets.only(
-                        right: 0, left: 10, top: 15, bottom: 5),
+                    contentPadding:
+                        EdgeInsets.only(right: 0, left: 10, top: 15, bottom: 5),
                     suffixIcon: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CircleAvatar(
@@ -355,38 +378,73 @@ class _UploadPostState extends State<UploadPost> {
                   if (value.isEmpty) return 'Value is empty';
                   return null;
                 },
-
               ),
-              SizedBox(height: 100,),
+              SizedBox(
+                height: 20,
+              ),
+              Text('End Date', style: TextStyle(color: Colors.grey),),
+              DateTimePicker(
+                decoration: InputDecoration(
+                  hintText: 'End Date',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.only(right: 0, left: 10),
+                ),
+                type: DateTimePickerType.dateTime,
+                dateMask: 'd MMM, yyyy',
+                initialValue: DateTime.now().toString(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2100),
+                icon: Icon(Icons.event),
+                dateLabelText: 'Date',
+                timeLabelText: "Hour",
+                onChanged: (val) {
+                  DateTime dateTime = DateTime.parse(val);
+
+                  Timestamp myTimeStamp = Timestamp.fromDate(dateTime);
+
+                  endDate = myTimeStamp;
+                },
+                validator: (val) {
+                  return null;
+                },
+                onSaved: (val) => print(val),
+              ),
+              SizedBox(
+                height: 100,
+              ),
               Container(
                   color: Colors.deepPurpleAccent,
                   height: 45,
                   child: uploadStarted == true
-                      ? Center(child: Container(height: 30, width: 30,child: CircularProgressIndicator()),)
+                      ? Center(
+                          child: Container(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator()),
+                        )
                       : FlatButton(
-                      child: Text(
-                        'Upload Post',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      onPressed: () async{
-                        handleSubmit();
-                      })
-              ),
+                          child: Text(
+                            'Upload Post',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          onPressed: () async {
+                            handleSubmit();
+                          })),
               SizedBox(
                 height: 200,
               ),
             ],
           )),
-
     );
   }
 }
 
 class TaskType {
   const TaskType(this.name);
+
   final String name;
 }
 
@@ -419,7 +477,6 @@ void openDialog(context, title, message) {
           elevation: 0,
           children: <Widget>[
             Text(title,
-
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 20,
@@ -428,7 +485,6 @@ void openDialog(context, title, message) {
               height: 10,
             ),
             Text(message,
-
                 style: TextStyle(
                     color: Colors.grey[900],
                     fontSize: 16,

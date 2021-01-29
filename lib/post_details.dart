@@ -88,19 +88,15 @@ class _PostDetailsState extends State<PostDetails> {
   @override
   void initState() {
     super.initState();
-    if(widget.post.winner == "")
+    if(widget.post.people.length == 0)
       setState(() {
-        doneGeneratingTheWinner = false;
-      });
-    else
-      setState(() {
-        doneGeneratingTheWinner = true;
+        doneLoadingParticipants = true;
       });
     getParticipants();
   }
 
   bool doneLoadingParticipants = false;
-  bool doneGeneratingTheWinner = false;
+  bool doneGeneratingTheWinner = true;
 
   @override
   Widget build(BuildContext context) {
