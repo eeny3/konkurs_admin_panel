@@ -15,9 +15,9 @@ class _AdminPanelState extends State<AdminPanel> {
   int _pageIndex = 0;
 
   final List<String> titles = [
-    'Posts',
-    'Closed Posts',
-    'Upload Post',
+    'Конкурсы',
+    'Завершенные конкурсы',
+    'Создать конкурс',
   ];
 
   final List icons = [

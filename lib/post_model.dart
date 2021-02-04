@@ -7,8 +7,11 @@ class Post {
   String imagepost;
   String prize;
   String task1;
+  var taskOneTypeShared;
   String task2;
+  var taskTwoTypeShared;
   String task3;
+  var taskThreeTypeShared;
   bool shared;
   String todo;
   var date;
@@ -18,6 +21,7 @@ class Post {
   String documentName;
   String winner;
   int winnerId;
+  String winnerUid;
   bool isFinished;
 
   Post({
@@ -26,8 +30,11 @@ class Post {
     this.imagepost,
     this.prize,
     this.task1,
+    this.taskOneTypeShared,
     this.task2,
+    this.taskTwoTypeShared,
     this.task3,
+    this.taskThreeTypeShared,
     this.shared,
     this.todo,
     this.date,
@@ -37,6 +44,7 @@ class Post {
     this.documentName,
     this.winner,
     this.winnerId,
+    this.winnerUid,
     this.isFinished,
   });
 
@@ -50,8 +58,11 @@ class Post {
       imagepost: d['imagepost'],
       prize: d['prize'],
       task1: d['task1'],
+      taskOneTypeShared: d['task1TypeShared'],
       task2: d['task2'],
+      taskTwoTypeShared: d['task2TypeShared'],
       task3: d['task3'],
+      taskThreeTypeShared: d['task3TypeShared'],
       shared: d['shared'],
       todo: d['todo'],
       date: d['date'],
@@ -61,6 +72,7 @@ class Post {
       documentName: docName,
       winner: d['winner'],
       winnerId: d['winnerId'],
+      winnerUid: d['winnerUid'],
       isFinished: d['isFinished'],
     );
   }

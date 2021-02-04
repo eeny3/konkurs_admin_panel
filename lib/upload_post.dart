@@ -128,10 +128,8 @@ class _UploadPostState extends State<UploadPost> {
           await storageReference.put(mediaInfo.data, metadata).future;
 
       Uri imageUri = await uploadTaskSnapshot.ref.getDownloadURL();
-      print("download url $imageUri");
       return imageUri;
     } catch (e) {
-      print("File Upload Error $e");
       return null;
     }
   }
@@ -161,17 +159,17 @@ class _UploadPostState extends State<UploadPost> {
                 height: h * 0.10,
               ),
               Text(
-                'Post Details',
+                'Детали конкурса',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
               ),
               SizedBox(
                 height: 20,
               ),
               TextFormField(
-                decoration: inputDecoration('Enter Name', 'Name', titleCtrl),
+                decoration: inputDecoration('Введите имя', 'Имя', titleCtrl),
                 controller: titleCtrl,
                 validator: (value) {
-                  if (value.isEmpty) return 'Value is empty';
+                  if (value.isEmpty) return 'Пустое значение';
                   return null;
                 },
               ),
@@ -184,10 +182,10 @@ class _UploadPostState extends State<UploadPost> {
                     flex: 8,
                     child: TextFormField(
                       decoration: inputDecoration(
-                          'Enter Image Url', 'Thumbnail Image', imageUrlCtrl),
+                          'Введите Url картинки', 'Превью картинки', imageUrlCtrl),
                       controller: imageUrlCtrl,
                       validator: (value) {
-                        if (value.isEmpty) return 'Value is empty';
+                        if (value.isEmpty) return 'Пустое значение';
                         return null;
                       },
                     ),
@@ -216,10 +214,10 @@ class _UploadPostState extends State<UploadPost> {
                     flex: 8,
                     child: TextFormField(
                       decoration: inputDecoration(
-                          'Prize Image Url', 'Prize Image', prizeUrlCtrl),
+                          'Url приза', 'Изображение приза', prizeUrlCtrl),
                       controller: prizeUrlCtrl,
                       validator: (value) {
-                        if (value.isEmpty) return 'Value is empty';
+                        if (value.isEmpty) return 'Пустое значение';
                         return null;
                       },
                     ),
@@ -243,7 +241,7 @@ class _UploadPostState extends State<UploadPost> {
                 height: 20,
               ),
               TextFormField(
-                decoration: inputDecoration('task 1', 'task 1', taskOneCtrl),
+                decoration: inputDecoration('задание 1', 'задание 1', taskOneCtrl),
                 controller: taskOneCtrl,
                 validator: (value) {
                   //if (value.isEmpty) return 'Value is empty';
@@ -255,7 +253,7 @@ class _UploadPostState extends State<UploadPost> {
               ),
               DropdownButtonFormField<TaskType>(
                 decoration: InputDecoration(
-                  hintText: 'select task 1 type',
+                  hintText: 'выберите тип задания',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.only(right: 0, left: 10),
                 ),
@@ -279,7 +277,7 @@ class _UploadPostState extends State<UploadPost> {
                 height: 20,
               ),
               TextFormField(
-                decoration: inputDecoration('task 2', 'task 2', taskTwoCtrl),
+                decoration: inputDecoration('задание 2', 'задание 2', taskTwoCtrl),
                 controller: taskTwoCtrl,
                 validator: (value) {
                   //if (value.isEmpty) return 'Value is empty';
@@ -291,7 +289,7 @@ class _UploadPostState extends State<UploadPost> {
               ),
               DropdownButtonFormField<TaskType>(
                 decoration: InputDecoration(
-                  hintText: 'select task 2 type',
+                  hintText: 'выберите тип задания',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.only(right: 0, left: 10),
                 ),
@@ -315,7 +313,7 @@ class _UploadPostState extends State<UploadPost> {
                 height: 20,
               ),
               TextFormField(
-                decoration: inputDecoration('task 3', 'task 3', taskThreeCtrl),
+                decoration: inputDecoration('задание 3', 'задание 3', taskThreeCtrl),
                 controller: taskThreeCtrl,
                 validator: (value) {
                   //if (value.isEmpty) return 'Value is empty';
@@ -327,7 +325,7 @@ class _UploadPostState extends State<UploadPost> {
               ),
               DropdownButtonFormField<TaskType>(
                 decoration: InputDecoration(
-                  hintText: 'select task 3 type',
+                  hintText: 'выберите тип задания',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.only(right: 0, left: 10),
                 ),
@@ -352,9 +350,9 @@ class _UploadPostState extends State<UploadPost> {
               ),
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: 'Enter Description (Html or Normal Text)',
+                    hintText: 'Введите описание',
                     border: OutlineInputBorder(),
-                    labelText: 'Description',
+                    labelText: 'Описание',
                     contentPadding:
                         EdgeInsets.only(right: 0, left: 10, top: 15, bottom: 5),
                     suffixIcon: Padding(
@@ -375,17 +373,17 @@ class _UploadPostState extends State<UploadPost> {
                 keyboardType: TextInputType.multiline,
                 controller: descriptionCtrl,
                 validator: (value) {
-                  if (value.isEmpty) return 'Value is empty';
+                  if (value.isEmpty) return 'Пустое значение';
                   return null;
                 },
               ),
               SizedBox(
                 height: 20,
               ),
-              Text('End Date', style: TextStyle(color: Colors.grey),),
+              Text('Дата завершения', style: TextStyle(color: Colors.grey),),
               DateTimePicker(
                 decoration: InputDecoration(
-                  hintText: 'End Date',
+                  hintText: 'Дата завершения',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.only(right: 0, left: 10),
                 ),
@@ -424,7 +422,7 @@ class _UploadPostState extends State<UploadPost> {
                         )
                       : FlatButton(
                           child: Text(
-                            'Upload Post',
+                            'Создать конкурс',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,

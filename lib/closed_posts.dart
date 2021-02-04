@@ -88,7 +88,7 @@ class _ClosedPostsState extends State<ClosedPosts> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'Posts',
+              'Конкурсы',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800),
             ),
           ],
@@ -251,7 +251,7 @@ class _ClosedPostsState extends State<ClosedPosts> {
             contentPadding: EdgeInsets.all(50),
             elevation: 0,
             children: <Widget>[
-              Text('Delete?',
+              Text('Удалить?',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -259,7 +259,7 @@ class _ClosedPostsState extends State<ClosedPosts> {
               SizedBox(
                 height: 10,
               ),
-              Text('Want to delete this item from the database?',
+              Text('Удалить с базы данных?',
                   style: TextStyle(
                       color: Colors.grey[900],
                       fontSize: 16,
@@ -275,7 +275,7 @@ class _ClosedPostsState extends State<ClosedPosts> {
                             borderRadius: BorderRadius.circular(25)),
                         color: Colors.redAccent,
                         child: Text(
-                          'Yes',
+                          'Да',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -297,7 +297,7 @@ class _ClosedPostsState extends State<ClosedPosts> {
                             borderRadius: BorderRadius.circular(25)),
                         color: Colors.deepPurpleAccent,
                         child: Text(
-                          'No',
+                          'Нет',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
